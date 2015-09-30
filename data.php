@@ -27,9 +27,32 @@
 		//echo $_SESSION["logged_in_user_id"];
 		
 		// valideerite väljad
-		// mõlemad on kohustuslikud
-		//salvestate ab'i fn kaudu addCarPlate
+		if ( empty($_POST["number_plate"]) ) {
+			$number_plate_error = "See väli on kohustuslik";
+		}else{
+			$number_plate = cleanInput($_POST["number_plate"]);
+		}
 		
+		if ( empty($_POST["color"]) ) {
+			$color_error = "See väli on kohustuslik";
+		}else{
+			$color = cleanInput($_POST["color"]);
+		}
+		
+		// mõlemad on kohustuslikud
+		if($color_error == "" && $number_plate_error == ""){
+			//salvestate ab'i fn kaudu addCarPlate
+			addCarPlate($number_plate, $color);
+			
+		}
+		
+	}
+	
+	function cleanInput($data) {
+		$data = trim($data);
+		$data = stripslashes($data);
+		$data = htmlspecialchars($data);
+		return $data;
 	}
 	
 
