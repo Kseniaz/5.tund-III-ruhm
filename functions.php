@@ -4,10 +4,15 @@
 	require_once("../config_global.php");
 	$database = "if15_romil_3";
 	
+	//tekitatakse sessioon, mida hoitakse serveris,
+	// kõik session muutujad on kättesaadavad kuni viimase brauseriakna sulgemiseni
+	session_start();
+	
 	
 	// võtab andmed ja sisestab ab'i
 	// võtame vastu 2 muutujat
 	function createUser($create_email, $hash){
+		
 		// Global muutujad, et kätte saada config failist andmed
 		$mysqli = new mysqli($GLOBALS["servername"], $GLOBALS["server_username"], $GLOBALS["server_password"], $GLOBALS["database"]);
 		
@@ -31,6 +36,14 @@
 		if($stmt->fetch()){
 			// ab'i oli midagi
 			echo "Email ja parool õiged, kasutaja id=".$id_from_db;
+			
+			// tekitan sessiooni muutujad
+			$_SESSION["logged_in_user_id"] = $id_from_db;
+			$_SESSION["logged_in_user_email"] = $email_from_db;
+			
+			//suunan data.php lehele
+			header("Location: data.php");
+			
 		}else{
 			// ei leidnud
 			echo "Wrong credentials!";
